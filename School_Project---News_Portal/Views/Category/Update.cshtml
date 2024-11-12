@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model CategoryModel
+
+<h1>Update Category</h1>
+<div class="w-100 h-100 border rounded">
+    <div class=" col-md-5 p-4">
+        <form asp-controller="Category" asp-action="Update" method="post">
+            <div class="mb-2">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="mb-2">
+                <label asp-for="IsActive" class="form-check-label">Active</label>
+                <input asp-for="IsActive" class="form-check-inline" />
+            </div>
+            <div class="mb-2">
+                <input type="submit" value="Add Category" class="btn btn-primary btn-sm" />
+                <a asp-action="Index" class="btn btn-danger btn-sm">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

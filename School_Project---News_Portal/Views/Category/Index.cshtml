@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model List<CategoryModel>
+
+<h1 class="h3 mb-4 text-gray-800">Categories</h1>
+
+<a class="btn btn-success m-2" asp-controller="Category" asp-action="Add">Add Category</a>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Updated Last</th>
+            <th>Update - Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success text-white">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger text-white">Not Active</span>
+                    }
+                </td>
+                <td>@item.Created</td>
+                <td>@item.Updated</td>
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Update</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
