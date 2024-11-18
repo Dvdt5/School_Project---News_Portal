@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using School_Project___News_Portal.Repositories;
 using School_Project___News_Portal.ViewModels;
 using School_Project___News_Portal.Models;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace School_Project___News_Portal.Controllers
 {
@@ -10,11 +11,13 @@ namespace School_Project___News_Portal.Controllers
     {
         private readonly CategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+        private readonly INotyfService _notfy;
 
-        public CategoryController(CategoryRepository categoryRepository, IMapper mapper)
+        public CategoryController(CategoryRepository categoryRepository, IMapper mapper, INotyfService notfy)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _notfy = notfy;
         }
 
         public async Task<IActionResult> Index()
@@ -44,6 +47,7 @@ namespace School_Project___News_Portal.Controllers
             category.Updated = DateTime.Now;
 
             await _categoryRepository.AddAsync(category);
+            _notfy.Success("Successfuly Created Category");
             return RedirectToAction("Index");
         }
 
@@ -68,7 +72,7 @@ namespace School_Project___News_Portal.Controllers
             category.IsActive = model.IsActive;
             category.Updated = DateTime.Now;
             await _categoryRepository.UpdateAsync(category);
-
+            _notfy.Success("Successfuly Updated Category");
             return RedirectToAction("Index");
         }
 
@@ -84,6 +88,7 @@ namespace School_Project___News_Portal.Controllers
         public async Task<IActionResult> Delete(CategoryModel model)
         {
             await _categoryRepository.DeleteAsync(model.Id);
+            _notfy.Success("Successfuly Deleted Category");
             return RedirectToAction("Index");
         }
     }

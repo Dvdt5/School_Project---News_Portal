@@ -2,21 +2,25 @@
 
 namespace School_Project___News_Portal.ViewModels
 {
-    public class NewModel : BaseModel
+    public class NewsItemModel : BaseModel
     {
-        [Display(Name = "New's Title")]
-        [Required(ErrorMessage = "Please enter a title!")]
+        [Display(Name = "News Item Title")]
+        [Required(ErrorMessage = "Please enter a Title!")]
         public string Title { get; set; }
 
 
-        [Display(Name = "New's Description")]
+        [Display(Name = "News Item Description")]
         [Required(ErrorMessage = "Please enter a description!")]
         public string Description { get; set; }
 
 
+        //[Display(Name = "Photo")]
+        //public IFormFile PhotoFile { get; set; }
+
+        //public string PhotoUrl { get; set; }
+
         [Display(Name = "Category")]
         [Required(ErrorMessage = "Please enter a category!")]
         public int CategoryId { get; set; }
-
     }
 }

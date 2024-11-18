@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@model NewsItemModel
+
+<div class="card">
+    <div class="card-header bg-success text-light">
+        <h1>Update News</h1>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <form asp-controller="NewsItem" asp-action="Update" method="post" enctype="multipart/form-data" class="p-2 col-8">
+                <div class="row">
+                    <div class="m-2 col">
+                        <label asp-for="Title">Title</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Title"></span>
+                    </div>
+                    <div class="m-2 col">
+                        <label asp-for="CategoryId">Category</label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
+                            <option value="">Choose a category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    @* <div class="m-2 col">
+                    <label asp-for="PhotoFile">Enter an Img</label>
+                    <input class="form-control form-control-user" asp-for="PhotoFile" placeholder="News Img" accept="image/png, image/gif, image/jpeg">
+                    </div> *@
+                </div>
+                <div class="row">
+                    <div class="col m-2">
+                        <label asp-for="Description">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="6" style="resize:none;"></textarea>
+                        <span class="text-danger" asp-validation-for="Description"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-2 mb-4">
+
+                        <label asp-for="IsActive" class="form-check-label">Active</label>
+                        <input asp-for="IsActive" class="form-check-inline" />
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="submit" value="Add News" class="btn btn-primary btn-sm" />
+                    <a asp-action="Index" class="btn btn-danger btn-sm">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<NewsItemRepository>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -20,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddNotyf(config =>
 {
-    config.DurationInSeconds = 10;
+    config.DurationInSeconds = 5;
     config.IsDismissable = true;
     config.Position = NotyfPosition.BottomRight;
 });
