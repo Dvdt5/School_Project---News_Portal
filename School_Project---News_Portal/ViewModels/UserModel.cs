@@ -22,12 +22,15 @@ namespace School_Project___News_Portal.ViewModels
 
 
         [Display(Name = "Password")]
-        [Required(ErrorMessage = "Enter a PassWord")]
+        [Required(ErrorMessage = "Enter a Password")]
         public string Password { get; set; }
 
 
         [Display(Name = "Role")]
         [Required(ErrorMessage = "Enter a role!")]
         public string Role { get; set; }
+
+        [Display(Name = "PhotoUrl")]
+        public string PhotoUrl { get; set; }
     }
 }

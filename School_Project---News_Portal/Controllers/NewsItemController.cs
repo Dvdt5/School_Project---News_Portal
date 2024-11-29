@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
+using Microsoft.Extensions.FileProviders;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
 using School_Project___News_Portal.ViewModels;
@@ -16,13 +17,15 @@ namespace School_Project___News_Portal.Controllers
         private readonly CategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly INotyfService _notfy;
+        private readonly IFileProvider _fileProvider;
 
-        public NewsItemController(NewsItemRepository newsItemRepository, IMapper mapper, INotyfService notfy, CategoryRepository categoryRepository)
+        public NewsItemController(NewsItemRepository newsItemRepository, IMapper mapper, INotyfService notfy, CategoryRepository categoryRepository, IFileProvider fileProvider)
         {
             _newsItemRepository = newsItemRepository;
             _mapper = mapper;
             _notfy = notfy;
             _categoryRepository = categoryRepository;
+            _fileProvider = fileProvider;
         }
 
         public async Task<IActionResult> Index()
@@ -52,10 +55,6 @@ namespace School_Project___News_Portal.Controllers
                 return View(model);
             }
             var newsItem = _mapper.Map<NewsItem>(model);
-
-            newsItem.PhotoUrl = "www";
-            newsItem.Created = DateTime.Now;
-            newsItem.Updated = DateTime.Now;
 
             await _newsItemRepository.AddAsync(newsItem);
             _notfy.Success("News Item Successfuly Added");

@@ -1,5 +1,6 @@
 using AspNetCoreHero.ToastNotification;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
 using System.Reflection;
@@ -14,6 +15,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<NewsItemRepository>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
