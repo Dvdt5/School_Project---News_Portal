@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace School_Project___News_Portal.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         

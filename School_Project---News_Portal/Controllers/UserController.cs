@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AspNetCoreHero.ToastNotification.Notyf.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.Encrypt.Extensions;
 using School_Project___News_Portal.Models;
@@ -9,6 +10,7 @@ using School_Project___News_Portal.ViewModels;
 
 namespace School_Project___News_Portal.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly UserRepository _userRepository;

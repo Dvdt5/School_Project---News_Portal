@@ -126,6 +126,11 @@ namespace School_Project___News_Portal.Controllers
             return RedirectToAction("Login");
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

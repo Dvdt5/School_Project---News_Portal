@@ -4,9 +4,11 @@ using School_Project___News_Portal.Repositories;
 using School_Project___News_Portal.ViewModels;
 using School_Project___News_Portal.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Project___News_Portal.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly CategoryRepository _categoryRepository;

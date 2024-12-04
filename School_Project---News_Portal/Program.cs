@@ -1,4 +1,5 @@
 using AspNetCoreHero.ToastNotification;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using School_Project___News_Portal.Models;
@@ -28,6 +29,17 @@ builder.Services.AddNotyf(config =>
     config.IsDismissable = true;
     config.Position = NotyfPosition.BottomRight;
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt =>
+    {
+        opt.Cookie.Name = "CookieAuthApp";
+        opt.ExpireTimeSpan = TimeSpan.FromDays(3);
+        opt.LoginPath = "/Home/Login";
+        opt.LogoutPath = "/Home/Logout";
+        opt.AccessDeniedPath = "/Home/AccessDenied";
+        opt.SlidingExpiration = false;
+    });
 
 var app = builder.Build();
 

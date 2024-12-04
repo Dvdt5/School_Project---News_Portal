@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
@@ -11,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace School_Project___News_Portal.Controllers
 {
+    [Authorize]
     public class NewsItemController : Controller
     {
         private readonly NewsItemRepository _newsItemRepository;
