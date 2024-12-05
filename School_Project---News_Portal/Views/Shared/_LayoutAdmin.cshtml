@@ -103,11 +103,11 @@
                         <li>
                             @if (User.IsInRole("Admin"))
                             {
-                                <span class="badge bg-success text-white">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
+                                <span class="badge bg-success text-white m-4 p-2">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
                             }
                             else
                             {
-                                <span class="badge bg-danger text-white">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
+                                <span class="badge bg-primary text-white m-4 p-2">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
                             }
                         </li>
 
