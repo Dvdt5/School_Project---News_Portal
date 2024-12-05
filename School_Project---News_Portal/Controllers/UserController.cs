@@ -3,6 +3,7 @@ using AspNetCoreHero.ToastNotification.Notyf.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NETCore.Encrypt.Extensions;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
@@ -100,6 +101,13 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(UserModel model)
         {
+            var user = await _userRepository.GetByIdAsync(model.Id);
+            if (user.Role == "Admin") 
+            {
+                _notyf.Error("You dont have permission to delete admin");
+                return RedirectToAction("Index");
+            }
+
             await _userRepository.DeleteAsync(model.Id);
             _notyf.Success("User Successfuly Deleted");
             return RedirectToAction("Index");
