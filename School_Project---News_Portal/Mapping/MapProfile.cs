@@ -12,6 +12,7 @@ namespace School_Project___News_Portal.Mapping
             CreateMap<User, UserModel>().ReverseMap();
             CreateMap<User, RegisterModel>().ReverseMap();
             CreateMap<NewsItem, NewsItemModel>().ReverseMap();
+            CreateMap<Todo, TodoModel>().ReverseMap();
         }
     }
 }

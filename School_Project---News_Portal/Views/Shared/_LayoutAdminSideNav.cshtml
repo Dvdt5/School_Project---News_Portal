@@ -28,6 +28,13 @@
         </a>
     </li>
 
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Todo" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Todos</span>
+        </a>
+    </li>
     
 
     @if (User.IsInRole("Admin"))
