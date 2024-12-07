@@ -52,11 +52,26 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(NewsItemModel model)
         {
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+            var rootFolder = _fileProvider.GetDirectoryContents("wwwroot");
+            var photoUrl = "no-img-news.jpg";
+            if (model.PhotoFile != null)
+            {
+                var filename = Guid.NewGuid().ToString() + Path.GetExtension(model.PhotoFile.FileName);
+                var photoPath = Path.Combine(rootFolder.First(x => x.Name == "NewsImgs").PhysicalPath, filename);
+                using var stream = new FileStream(photoPath, FileMode.Create);
+                model.PhotoFile.CopyTo(stream);
+                photoUrl = filename;
+            }
+            
             var newsItem = _mapper.Map<NewsItem>(model);
+            newsItem.PhotoUrl = photoUrl;
+            newsItem.Created = DateTime.Now;
+            newsItem.Updated = DateTime.Now;
 
             await _newsItemRepository.AddAsync(newsItem);
             _notfy.Success("News Item Successfuly Added");
@@ -87,8 +102,20 @@ namespace School_Project___News_Portal.Controllers
                 return View(model);
             }
 
+            var rootFolder = _fileProvider.GetDirectoryContents("wwwroot");
+            var photoUrl = "no-img-news.jpg";
+            if (model.PhotoFile != null)
+            {
+                var filename = Guid.NewGuid().ToString() + Path.GetExtension(model.PhotoFile.FileName);
+                var photoPath = Path.Combine(rootFolder.First(x => x.Name == "NewsImgs").PhysicalPath, filename);
+                using var stream = new FileStream(photoPath, FileMode.Create);
+                model.PhotoFile.CopyTo(stream);
+                photoUrl = filename;
+            }
+            
+
             var newsItem = _mapper.Map<NewsItem>(model);
-            newsItem.PhotoUrl = "www";
+            newsItem.PhotoUrl = photoUrl;
             newsItem.Updated = DateTime.Now;
             await _newsItemRepository.UpdateAsync(newsItem);
             _notfy.Success("News Succesfuly Updated");

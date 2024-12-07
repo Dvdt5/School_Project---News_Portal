@@ -3,7 +3,11 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
+<div class="card">
+    <div class="card-header bg-success text-light">
+        <h1>Task Notifications</h1>
+    </div>
+<div class="card-body">
 <div class="row">
     <div class="col-md-8">
         <table class="table table-striped" id="tbTodos">
@@ -20,7 +24,7 @@
         </table>
     </div>
     <div class="col-md-4">
-        <h5 id="editTitle">New Notification</h5>
+        <h5 id="editTitle" class="h1">New Notification</h5>
         <div class="mb-3">
             <label>Title</label>
             <input type="text" class="form-control" id="txtTitle" />
@@ -44,6 +48,8 @@
         </div>
         <div id="divResult"></div>
     </div>
+</div>
+</div>
 </div>
 @section Scripts {
     <script>
