@@ -6,8 +6,8 @@
 
 <div class="row">
     <div class="col-md-8">
-        <table class="table" id="tbTodos">
-            <thead>
+        <table class="table table-striped" id="tbTodos">
+            <thead class="thead-dark">
                 <tr>
                     <th>Title</th>
                     <th>Description</th>
@@ -20,7 +20,7 @@
         </table>
     </div>
     <div class="col-md-4">
-        <h5 id="editTitle">New Task</h5>
+        <h5 id="editTitle">New Notification</h5>
         <div class="mb-3">
             <label>Title</label>
             <input type="text" class="form-control" id="txtTitle" />
@@ -89,7 +89,7 @@
         });
         $(document).on("click", ".edit", function () {
             var id = $(this).attr("data-id");
-            $("#editTitle").html("Update Task");
+            $("#editTitle").html("Update Notification");
             $("#btnCancel").show();
             $("#btnDelete").show();
             $.ajax({
@@ -105,7 +105,7 @@
             });
         });
         $("#btnCancel").click(function () {
-            $("#editTitle").html("Create Task");
+            $("#editTitle").html("Create Notification");
             $("#btnCancel").hide();
             $("#btnDelete").hide();
             $("#txtId").val(0);
@@ -146,6 +146,7 @@
                 type: "GET",
                 success: function (d) {
                     TodoToTable(d)
+                    TodoToNotifications(d)
                 },
                 error: function (e) { },
             });

@@ -50,56 +50,27 @@
 
 
                         <!-- Nav Item - Alerts -->
-@*                         <li class="nav-item dropdown no-arrow mx-1">
+                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span class="badge badge-danger badge-counter">!!!</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
+                                 aria-labelledby="alertsDropdown" id="notificationsDropdown">
+                                <h6 class="dropdown-header text-center">
+                                    Notifications Center
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                <span id="notificationRows">
+                                    
+
+                                </span>
+                                <a class="dropdown-item text-center small text-500" asp-controller="Todo" asp-action="Index">Show All Notifications</a>
                             </div>
                         </li>
- *@                     
+                      
                         <li>
                             @if (User.IsInRole("Admin"))
                             {
@@ -200,6 +171,41 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/sb-admin-2/js/sb-admin-2.min.js"></script>
+
+    <script>
+        GetTodoList();
+        function GetTodoList() {
+            $.ajax({
+                url: "/Todo/ListAjax",
+                type: "GET",
+                success: function (d) {
+                    
+                    TodoToNotifications(d)
+                },
+                error: function (e) { },
+            });
+        }
+        function TodoToNotifications(data) {
+            $("#notificationsDropdown #notificationRows").empty();
+            var rows = "";
+
+            $.each(data, function (i, item) {
+                if (i >= 3) return false;
+                rows += `<span class="dropdown-item d-flex align-items-center">`;
+                rows += `<div>`;
+                if (item.isOK == 1) {
+                    rows += `<div class="small text-500">` + item.title + " <span class='badge bg-success text-white'>Done</span>" + "</div>";
+                } else {
+                    rows += `<div class="small text-500">` + item.title + " <span class='badge bg-danger text-white'>in Progress</span>" + "</div>";
+                }
+                rows += `<span class="font-weight-bold">` + item.description + "</span>";
+                rows += `</div>`;
+                rows += "</span>";
+            });
+            $("#notificationRows").append(rows);
+        }
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 
