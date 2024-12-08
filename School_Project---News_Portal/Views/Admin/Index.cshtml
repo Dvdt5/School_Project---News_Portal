@@ -3,22 +3,21 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Hello</h1>
+@model List<NewsItemModel>
 
-<div class="col-12 grid">
-    <div class="row">
-        <div class="card border-left-primary col m-2">
-            <p>Hello</p>
-        </div>
-        <div class="card border-left-primary col m-2">
-            <p>Hello</p>
-        </div>
-        <div class="card border-left-primary col m-2">
-            <p>Hello</p>
-        </div>
-        <div class="card border-left-primary col m-2">
-            <p>Hello</p>
-        </div>
+<h1>News Items</h1>
 
-    </div>
+<div class="col-12 d-flex justify-content-around flex-wrap ">
+    @foreach (var item in Model)
+    {
+        <div class="card col-3 m-2 p-4 shadow">
+            <img class="card-img-top" src="~/NewsImgs/@item.PhotoUrl" alt="Card image cap">
+            
+            <div class="card-body">
+                <p>@item.Title</p>
+                <p class="small">@item.Description</p>
+            </div>
+        </div>
+    }
 </div>
+

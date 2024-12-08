@@ -13,26 +13,29 @@ namespace School_Project___News_Portal.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-
+        private readonly NewsItemRepository _newsItemRepository;
         private readonly UserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly INotyfService _notyf;
         private readonly IConfiguration _config;
         private readonly IFileProvider _fileProvider;
 
-        public AdminController(UserRepository userRepository, IMapper mapper, INotyfService notyf, IConfiguration config, IFileProvider fileProvider)
+        public AdminController(UserRepository userRepository, IMapper mapper, INotyfService notyf, IConfiguration config, IFileProvider fileProvider, NewsItemRepository newsItemRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _notyf = notyf;
             _config = config;
             _fileProvider = fileProvider;
+            _newsItemRepository = newsItemRepository;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var newsItems = await _newsItemRepository.GetAllAsync();
+            var newsItemModels = _mapper.Map<List<NewsItemModel>>(newsItems);
+            return View(newsItemModels);
         }
 
         public async Task<IActionResult> Profile()

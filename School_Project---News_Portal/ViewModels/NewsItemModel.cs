@@ -17,6 +17,8 @@ namespace School_Project___News_Portal.ViewModels
         [Display(Name = "Photo")]
         public IFormFile PhotoFile { get; set; }
 
+        public string ?PhotoUrl { get; set; }
+
 
         [Display(Name = "Category")]
         [Required(ErrorMessage = "Please enter a category!")]
