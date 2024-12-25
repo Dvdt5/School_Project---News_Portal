@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using School_Project___News_Portal.Hubs;
 using School_Project___News_Portal.Localisation;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
@@ -66,6 +67,8 @@ builder.Services.ConfigureApplicationCookie(opt =>
 });
 
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -87,4 +90,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapHub<GeneralHub>("/general-hub");
 app.Run();

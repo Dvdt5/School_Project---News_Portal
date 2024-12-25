@@ -205,7 +205,7 @@
             $("#notificationRows").append(rows);
         }
     </script>
-
+    <script src="~/js/signalr.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 
