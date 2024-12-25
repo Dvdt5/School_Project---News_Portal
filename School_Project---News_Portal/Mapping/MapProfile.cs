@@ -9,8 +9,8 @@ namespace School_Project___News_Portal.Mapping
         public MapProfile()
         {
             CreateMap<Category, CategoryModel>().ReverseMap();
-            CreateMap<User, UserModel>().ReverseMap();
-            CreateMap<User, RegisterModel>().ReverseMap();
+            CreateMap<AppUser, UserModel>().ReverseMap();
+            CreateMap<AppUser, RegisterModel>().ReverseMap();
             CreateMap<NewsItem, NewsItemModel>().ReverseMap();
             CreateMap<Todo, TodoModel>().ReverseMap();
         }

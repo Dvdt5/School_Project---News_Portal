@@ -102,8 +102,9 @@ namespace School_Project___News_Portal.Controllers
                 return View(model);
             }
 
+
             var rootFolder = _fileProvider.GetDirectoryContents("wwwroot");
-            var photoUrl = "no-img-news.jpg";
+            var photoUrl = model.PhotoUrl;
             if (model.PhotoFile != null)
             {
                 var filename = Guid.NewGuid().ToString() + Path.GetExtension(model.PhotoFile.FileName);

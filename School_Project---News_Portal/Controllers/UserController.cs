@@ -8,28 +8,31 @@ using NETCore.Encrypt.Extensions;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
 using School_Project___News_Portal.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace School_Project___News_Portal.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
-        private readonly UserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly INotyfService _notyf;
         private readonly IConfiguration _config;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
 
-        public UserController(UserRepository userRepository, IMapper mapper, INotyfService notyf, IConfiguration config)
+        public UserController(IMapper mapper, INotyfService notyf, IConfiguration config, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
-            _userRepository = userRepository;
             _mapper = mapper;
             _notyf = notyf;
             _config = config;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userManager.Users.ToListAsync();
             var userModels = _mapper.Map<List<UserModel>>(users);
             return View(userModels);
         }
@@ -41,36 +44,41 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(UserModel model)
         {
-           
-            if (_userRepository.Where(s => s.UserName == model.UserName).Count() > 0)
-            {
-                _notyf.Error("UserName is already taken!");
-                return View(model);
-            }
-            if (_userRepository.Where(s => s.Email == model.Email).Count() > 0)
-            {
-                _notyf.Error("Email is already taken!");
-                return View(model);
-            }
-            
-            var user = new User();
+
+            var user = new AppUser();
             user.FullName = model.FullName;
             user.UserName = model.UserName;
             user.Email = model.Email;
-            user.Created = DateTime.Now;
-            user.Updated = DateTime.Now;
             user.PhotoUrl = "no-img.png";
-            user.Password = MD5Hash(model.Password);
-            user.Role = model.Role;
-            await _userRepository.AddAsync(user);
+            var identityResult = await _userManager.CreateAsync(user, model.Password);
+
+            if (!identityResult.Succeeded)
+            {
+                foreach (var item in identityResult.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                    _notyf.Error(item.Description);
+                }
+                return View(model);
+            }
+
+            var user1 = await _userManager.FindByNameAsync(model.UserName);
+            var roleExist = await _roleManager.RoleExistsAsync("Member");
+            if (!roleExist)
+            {
+                var role = new AppRole { Name = "Member" };
+                await _roleManager.CreateAsync(role);
+            }
+
+            await _userManager.AddToRoleAsync(user1, "Member");
             _notyf.Success("User added");
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Update(int id) 
+        public async Task<IActionResult> Update(string id) 
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             var userModel = _mapper.Map<UserModel>(user);
 
             return View(userModel);
@@ -78,22 +86,21 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(UserModel model)
         {
-            var user = await _userRepository.GetByIdAsync(model.Id);
+    
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
 
             user.FullName = model.FullName;
             user.UserName = model.UserName;
             user.Email = model.Email;
-            user.Role = model.Role;
-            user.Updated = DateTime.Now;
 
-            await _userRepository.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
             _notyf.Success("User Updated");
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             var userModel = _mapper.Map<UserModel>(user);
 
             return View(userModel);
@@ -101,24 +108,50 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(UserModel model)
         {
-            var user = await _userRepository.GetByIdAsync(model.Id);
-            if (user.Role == "Admin") 
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
+            if (await _userManager.IsInRoleAsync(user ,"Admin")) 
             {
                 _notyf.Error("You dont have permission to delete admin");
                 return RedirectToAction("Index");
             }
 
-            await _userRepository.DeleteAsync(model.Id);
+            await _userManager.DeleteAsync(user);
             _notyf.Success("User Successfuly Deleted");
             return RedirectToAction("Index");
         }
 
-        public string MD5Hash(string pass)
+        public async Task<IActionResult> UserRole(string id)
         {
-            var salt = _config.GetValue<string>("AppSettings:MD5Salt");
-            var password = pass + salt;
-            var hashed = password.MD5();
-            return hashed;
+            var roles = await _roleManager.Roles.ToListAsync();
+            var user = await _userManager.FindByIdAsync(id);
+            var userRoleModels = new List<UserRoleModel>();
+            foreach (var role in roles)
+            {
+                var userRoleModel = new UserRoleModel();
+                userRoleModel.UserId = id;
+                userRoleModel.RoleId = role.Id;
+                userRoleModel.RoleName = role.Name;
+                userRoleModel.IsInRole = await _userManager.IsInRoleAsync(user, role.Name);
+                userRoleModels.Add(userRoleModel);
+            }
+            return View(userRoleModels);
+        }
+
+        public async Task<IActionResult> UserRoleAdd(string id, string userId)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.AddToRoleAsync(user, role.Name);
+            return RedirectToAction("UserRole", new { id = userId });
+        }
+
+        public async Task<IActionResult> UserRoleDelete(string id, string userId)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.RemoveFromRoleAsync(user, role.Name);
+
+            return RedirectToAction("UserRole", new { id = userId });
         }
     }
 }

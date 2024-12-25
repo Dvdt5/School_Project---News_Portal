@@ -11,15 +11,17 @@ namespace School_Project___News_Portal.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
+        private readonly NewsItemRepository _newsItemRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly INotyfService _notfy;
 
-        public CategoryController(CategoryRepository categoryRepository, IMapper mapper, INotyfService notfy)
+        public CategoryController(CategoryRepository categoryRepository, IMapper mapper, INotyfService notfy, NewsItemRepository newsItemRepository)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _notfy = notfy;
+            _newsItemRepository = newsItemRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -89,6 +91,13 @@ namespace School_Project___News_Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(CategoryModel model)
         {
+            var newsItems = await _newsItemRepository.GetAllAsync();
+            if (newsItems.Count(s => s.CategoryId == model.Id) > 0)
+            {
+                _notfy.Warning("This Category cannot be Deleted");
+                return RedirectToAction("Index");
+            }
+
             await _categoryRepository.DeleteAsync(model.Id);
             _notfy.Success("Successfuly Deleted Category");
             return RedirectToAction("Index");

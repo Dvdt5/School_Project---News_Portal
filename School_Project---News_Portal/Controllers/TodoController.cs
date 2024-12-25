@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
@@ -6,6 +7,7 @@ using School_Project___News_Portal.ViewModels;
 
 namespace School_Project___News_Portal.Controllers
 {
+    [Authorize]
     public class TodoController : Controller
     {
         private readonly TodoRepository _todoRepository;

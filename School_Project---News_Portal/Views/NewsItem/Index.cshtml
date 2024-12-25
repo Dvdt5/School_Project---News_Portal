@@ -17,7 +17,7 @@
                     <th>ID</th>
                     <th>CategoryID</th>
                     <th>Title</th>
-                    <th >Description</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Created</th>
                     <th>Updated Last</th>
@@ -31,7 +31,7 @@
                         <td>@item.Id</td>
                         <td>@item.CategoryId</td>
                         <td>@item.Title</td>
-                        <td>@item.Description</td>
+                        <td>@item.Description.Substring(0,36)...</td>
                         
                         <td>
                             @if (item.IsActive)
@@ -46,8 +46,8 @@
                         <td>@item.Created</td>
                         <td>@item.Updated</td>
                         <td>
-                            <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Update</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                            <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary btn-sm m-2">Update</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm m-2">Delete</a>
                         </td>
                     </tr>
                 }

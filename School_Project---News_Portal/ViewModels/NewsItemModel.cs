@@ -15,7 +15,7 @@ namespace School_Project___News_Portal.ViewModels
 
 
         [Display(Name = "Photo")]
-        public IFormFile PhotoFile { get; set; }
+        public IFormFile ?PhotoFile { get; set; }
 
         public string ?PhotoUrl { get; set; }
 
