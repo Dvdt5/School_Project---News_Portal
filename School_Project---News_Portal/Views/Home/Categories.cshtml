@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var item in ViewBag.Categories)
+{
+    <div class="position-relative overflow-hidden mb-3" style="height: 50px; background-color: orangered;">
+
+        <a asp-controller="Home" asp-action="Category" asp-route-id=@item.Id class="overlay align-items-center justify-content-center h4 m-0 text-white text-decoration-none">
+            @item.Name
+        </a>
+    </div>
+}
+

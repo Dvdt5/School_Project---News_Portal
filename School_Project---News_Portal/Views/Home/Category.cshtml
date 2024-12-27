@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-12">
+    <div class="d-flex align-items-center justify-content-between bg-light py-2 px-4 mb-3">
+        <h3 class="m-0">@ViewBag.Category.Name</h3>
+        <a class="text-secondary font-weight-medium text-decoration-none" asp-action="Categories">View All</a>
+    </div>
+</div>
+
+@foreach (var item in ViewBag.NewsItems)
+{
+    <div class="col-lg-4">
+        <div class="position-relative mb-3">
+            <img class="img-fluid w-100" src="~/NewsImgs/@item.PhotoUrl" style="object-fit: cover;">
+            <div class="overlay position-relative bg-light">
+                <div class="mb-2" style="font-size: 14px;">
+                    <p>@ViewBag.Category.Name</p>
+                    <span class="px-1">/</span>
+                    <span>@item.Updated</span>
+                </div>
+                <a class="h4" asp-action="NewsItem" asp-route-id=@item.Id>@item.Title</a>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+

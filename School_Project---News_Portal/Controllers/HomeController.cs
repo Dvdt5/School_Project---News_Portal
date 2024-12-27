@@ -11,11 +11,15 @@ using System.Security.Claims;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace School_Project___News_Portal.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly NewsItemRepository _newsItemRepository;
+        private readonly CategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _config;
         private readonly INotyfService _notyf;
@@ -24,7 +28,7 @@ namespace School_Project___News_Portal.Controllers
         private readonly RoleManager<AppRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration config, INotyfService notyf, IFileProvider fileProvider, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config, INotyfService notyf, IFileProvider fileProvider, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager, NewsItemRepository newsItemRepository, CategoryRepository categoryRepository, IMapper mapper)
         {
             _logger = logger;
             _config = config;
@@ -33,11 +37,58 @@ namespace School_Project___News_Portal.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _newsItemRepository = newsItemRepository;
+            _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var newsItems = await _newsItemRepository.GetAllAsync();
+            var newsItemModels = _mapper.Map<List<NewsItemModel>>(newsItems);
+            ViewBag.NewsItems = newsItemModels;
+
+            var categories = await _categoryRepository.GetAllAsync();
+            var categoryModels = _mapper.Map<List<CategoryModel>>(categories);
+            ViewBag.Categories = categoryModels;
+
+            return View(ViewBag);
+        }
+
+        public async Task<IActionResult> NewsItem(int id)
+        {
+            var newsItem = await _newsItemRepository.GetByIdAsync(id);
+            var newsItemModel = _mapper.Map<NewsItemModel>(newsItem);
+            ViewBag.NewsItem = newsItemModel;
+
+            var category = await _categoryRepository.GetByIdAsync(newsItem.CategoryId);
+            var categoryModel = _mapper.Map<CategoryModel>(category);
+            ViewBag.Category = categoryModel;
+
+            return View(ViewBag);
+        }
+
+        public async Task<IActionResult> Category(int id)
+        {
+            var newsItems = await _newsItemRepository.GetAllAsync();
+            var newsItemModels = _mapper.Map<List<NewsItemModel>>(newsItems);
+            ViewBag.NewsItems = newsItemModels.Where(x => x.CategoryId == id);
+
+            var categories = await _categoryRepository.GetAllAsync();
+            var categoryModels = _mapper.Map<List<CategoryModel>>(categories);
+            ViewBag.Categories = categoryModels;
+            ViewBag.Category = categoryModels.FirstOrDefault(x => x.Id == id);
+
+            return View(ViewBag);
+        }
+
+        public async Task<IActionResult> Categories()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var categoryModels = _mapper.Map<List<CategoryModel>>(categories);
+            ViewBag.Categories = categoryModels;
+
+            return View(ViewBag);
         }
 
 

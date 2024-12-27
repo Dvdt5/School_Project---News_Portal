@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "NewsItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="container">
+        <nav class="breadcrumb bg-transparent m-0 p-0">
+            <a class="breadcrumb-item" asp-controller="Home" asp-action="Index">Home</a>
+            <a class="breadcrumb-item" asp-controller="Home" asp-action="Categories">Categories</a>
+            <a class="breadcrumb-item" asp-controller="Home" asp-action="Category" asp-route-id=@ViewBag.Category.Id >@ViewBag.Category.Name</a>
+            <span class="breadcrumb-item active">@ViewBag.NewsItem.Title</span>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="m-3"><br /></div>
+<!-- News Detail Start -->
+<div class="position-relative mb-3">
+    <img class="img-fluid w-50" src="~/NewsImgs/@ViewBag.NewsItem.PhotoUrl" style="object-fit: cover;">
+    <div class="overlay position-relative bg-light">
+        <div class="mb-3">
+            <a asp-controller="Home" asp-action="Category" asp-route-id=@ViewBag.Category.Id>@ViewBag.Category.Name</a>
+            <span class="px-1">/</span>
+            <span>@ViewBag.NewsItem.Updated</span>
+        </div>
+        <div>
+            <h3 class="mb-3">@ViewBag.NewsItem.Title</h3>
+            <p>@ViewBag.NewsItem.Description</p>
+        </div>
+    </div>
+</div>
+<!-- News Detail End -->

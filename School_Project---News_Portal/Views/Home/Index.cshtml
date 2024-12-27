@@ -2,7 +2,50 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Main News Slider Start -->
+<div class="container-fluid py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="owl-carousel owl-carousel-2 carousel-item-1 position-relative mb-3 mb-lg-0">
+
+                    @foreach (var item in ViewBag.NewsItems)
+                    {
+                    <div class="position-relative overflow-hidden" style="height: 435px;">
+                        <img class="img-fluid h-100" src="~/NewsImgs/@item.PhotoUrl" style="object-fit: cover;">
+                        <div class="overlay">
+                            <div class="mb-1">
+                                <a class="text-white" asp-controller="Home" asp-action="NewsItem" asp-route-id=@item.Id>@item.Title</a>
+                                <span class="px-2 text-white">/</span>
+                                    <a class="text-white" asp-controller="Home" asp-action="NewsItem" asp-route-id=@item.Id>@item.Updated</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    }
+                    
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="d-flex align-items-center justify-content-between bg-light py-2 px-4 mb-3">
+                    <h3 class="m-0">Categories</h3>
+                    <a class="text-secondary font-weight-medium text-decoration-none" asp-controller="Home" asp-action="Categories">View All</a>
+                </div>
+                @{var i = 0;}
+                @foreach (var item in ViewBag.Categories)
+                {
+                    if(i == 4){break;}
+                    i++;
+                    <div class="position-relative overflow-hidden mb-3" style="height: 80px; background-color: orangered;">
+
+                        <a asp-controller="Home" asp-action="Category" asp-route-id=@item.Id class="overlay align-items-center justify-content-center h4 m-0 text-white text-decoration-none">
+                        @item.Name
+                    </a>
+                    </div>
+                }
+             
+            </div>
+        </div>
+    </div>
 </div>
+<!-- Main News Slider End -->
