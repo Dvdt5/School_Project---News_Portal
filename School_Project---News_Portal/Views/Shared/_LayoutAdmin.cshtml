@@ -72,14 +72,7 @@
                         </li>
                       
                         <li>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <span class="badge bg-success text-white m-4 p-2">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-primary text-white m-4 p-2">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value</span>
-                            }
+                            
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -88,9 +81,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600" >@User.Claims.FirstOrDefault(c => c.Type == "FullName").Value</span>
-                                <img class="img-profile rounded-circle"
-                                     src="~/userPhotos/@User.Claims.FirstOrDefault(c => c.Type == "PhotoUrl").Value">
+                               
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

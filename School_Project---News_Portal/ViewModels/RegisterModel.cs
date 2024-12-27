@@ -23,7 +23,7 @@ namespace School_Project___News_Portal.ViewModels
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Enter a Password!")]
         [MinLength(6, ErrorMessage = "Password needs to be atleast 6 character!")]
-        [RegularExpression("/(?=.*\\d)(?=.*[A-Z])(?=.*[\\W_]).+$/g", ErrorMessage = "Password needs atleast 1 number, 1 uppercase letter, 1 specail character!")]
+        
         public string Password { get; set; }
 
 

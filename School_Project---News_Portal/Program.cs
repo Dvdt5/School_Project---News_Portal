@@ -66,6 +66,13 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.SlidingExpiration = true;
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login";
+        options.LogoutPath = "/Home/Logout";
+    });
+builder.Services.AddAuthorization();
 
 builder.Services.AddSignalR();
 

@@ -117,7 +117,7 @@ namespace School_Project___News_Portal.Controllers
             if (signInResult.Succeeded)
             {
                 await _userManager.AddClaimAsync(user, new Claim("PhotoUrl", user.PhotoUrl));
-                
+
                 return RedirectToAction("Index", "Admin");
             }
 
@@ -148,7 +148,7 @@ namespace School_Project___News_Portal.Controllers
             if (model.PhotoFile != null)
             {
                 var filename = Guid.NewGuid().ToString() + Path.GetExtension(model.PhotoFile.FileName);
-                var photoPath = Path.Combine(rootFolder.First(x => x.Name == "UserPhotos").PhysicalPath, filename);
+                var photoPath = Path.Combine(rootFolder.First(x => x.Name == "userPhotos").PhysicalPath, filename);
                 using var stream = new FileStream(photoPath, FileMode.Create);
                 model.PhotoFile.CopyTo(stream);
                 photoUrl = filename;

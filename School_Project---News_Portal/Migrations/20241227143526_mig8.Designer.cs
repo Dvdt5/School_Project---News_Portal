@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using School_Project___News_Portal.Models;
 
@@ -11,9 +12,11 @@ using School_Project___News_Portal.Models;
 namespace School_Project___News_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241227143526_mig8")]
+    partial class mig8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,7 +254,7 @@ namespace School_Project___News_Portal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("School_Project___News_Portal.Models.NewsItem", b =>
@@ -290,7 +293,7 @@ namespace School_Project___News_Portal.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("NewsItems", (string)null);
+                    b.ToTable("NewsItems");
                 });
 
             modelBuilder.Entity("School_Project___News_Portal.Models.Todo", b =>
@@ -323,7 +326,7 @@ namespace School_Project___News_Portal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Todos", (string)null);
+                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
