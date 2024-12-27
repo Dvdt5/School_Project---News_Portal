@@ -254,6 +254,30 @@ namespace School_Project___News_Portal.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("School_Project___News_Portal.Models.LogHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("LogDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LogType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LogHistories");
+                });
+
             modelBuilder.Entity("School_Project___News_Portal.Models.NewsItem", b =>
                 {
                     b.Property<int>("Id")

@@ -5,6 +5,10 @@ using School_Project___News_Portal.ViewModels;
 using School_Project___News_Portal.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using School_Project___News_Portal.Hubs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Identity.Client;
 
 namespace School_Project___News_Portal.Controllers
 {
@@ -15,13 +19,18 @@ namespace School_Project___News_Portal.Controllers
         private readonly CategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly INotyfService _notfy;
+        private readonly IHubContext<GeneralHub> _generalHub;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CategoryController(CategoryRepository categoryRepository, IMapper mapper, INotyfService notfy, NewsItemRepository newsItemRepository)
+        public CategoryController(CategoryRepository categoryRepository, IMapper mapper, INotyfService notfy, NewsItemRepository newsItemRepository, IHubContext<GeneralHub> generalHub, UserManager<AppUser> userManager)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _notfy = notfy;
             _newsItemRepository = newsItemRepository;
+            _generalHub = generalHub;
+            _userManager = userManager;
+
         }
 
         public async Task<IActionResult> Index()
@@ -51,6 +60,7 @@ namespace School_Project___News_Portal.Controllers
             category.Updated = DateTime.Now;
 
             await _categoryRepository.AddAsync(category);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "added a new Category.");
             _notfy.Success("Successfuly Created Category");
             return RedirectToAction("Index");
         }
@@ -76,6 +86,7 @@ namespace School_Project___News_Portal.Controllers
             category.IsActive = model.IsActive;
             category.Updated = DateTime.Now;
             await _categoryRepository.UpdateAsync(category);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "updated a Category.");
             _notfy.Success("Successfuly Updated Category");
             return RedirectToAction("Index");
         }
@@ -99,6 +110,7 @@ namespace School_Project___News_Portal.Controllers
             }
 
             await _categoryRepository.DeleteAsync(model.Id);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "deleted a Category.");
             _notfy.Success("Successfuly Deleted Category");
             return RedirectToAction("Index");
         }

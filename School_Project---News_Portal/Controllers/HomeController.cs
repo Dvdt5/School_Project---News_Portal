@@ -66,7 +66,7 @@ namespace School_Project___News_Portal.Controllers
             if (signInResult.Succeeded)
             {
                 await _userManager.AddClaimAsync(user, new Claim("PhotoUrl", user.PhotoUrl));
-                await _userManager.AddClaimAsync(user, new Claim("FullName", user.FullName));
+                
                 return RedirectToAction("Index", "Admin");
             }
 
@@ -131,16 +131,7 @@ namespace School_Project___News_Portal.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                var claimsToRemove = await _userManager.GetClaimsAsync(user);
-                foreach (var claim in claimsToRemove)
-                {
-
-                    await _userManager.RemoveClaimAsync(user, claim);
-                }
-            }
+            
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }

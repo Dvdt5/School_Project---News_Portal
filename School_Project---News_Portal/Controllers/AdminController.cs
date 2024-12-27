@@ -9,6 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using NETCore.Encrypt.Extensions;
 using Microsoft.AspNetCore.Identity;
 using School_Project___News_Portal.Models;
+using System.Security.Claims;
 
 namespace School_Project___News_Portal.Controllers
 {

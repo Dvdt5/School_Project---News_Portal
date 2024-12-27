@@ -161,6 +161,10 @@
             </div>
         </div>
     </div>
+    <div id="divResult" style="position: fixed; bottom: 5vh; right: 5vw;">
+
+    </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="~/sb-admin-2/vendor/jquery/jquery.min.js"></script>
@@ -171,6 +175,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/sb-admin-2/js/sb-admin-2.min.js"></script>
+    <script src="~/js/signalr.js"></script>
 
     <script>
         GetTodoList();
@@ -204,8 +209,30 @@
             });
             $("#notificationRows").append(rows);
         }
+
+        var connectionHub = new signalR.HubConnectionBuilder()
+            .withUrl("/general-hub", signalR.HttpTransportType.WebSockets)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        // Category HUB
+        connectionHub.on("itemChanged", (d) => {
+            $("#divResult")
+                .show()
+                .removeClass()
+                .addClass("alert alert-info")
+                .html(d)
+                .fadeOut(10000);
+        });
+
+        function fullfilled() {
+            console.log("Connection Success");
+        }
+        function rejected() {
+            console.log("Connection Fail");
+        }
+        connectionHub.start().then(fullfilled, rejected);
     </script>
-    <script src="~/js/signalr.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 

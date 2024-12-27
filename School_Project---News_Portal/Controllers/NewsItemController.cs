@@ -3,8 +3,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.Extensions.FileProviders;
+using School_Project___News_Portal.Hubs;
 using School_Project___News_Portal.Models;
 using School_Project___News_Portal.Repositories;
 using School_Project___News_Portal.ViewModels;
@@ -20,14 +22,16 @@ namespace School_Project___News_Portal.Controllers
         private readonly IMapper _mapper;
         private readonly INotyfService _notfy;
         private readonly IFileProvider _fileProvider;
+        private readonly IHubContext<GeneralHub> _generalHub;
 
-        public NewsItemController(NewsItemRepository newsItemRepository, IMapper mapper, INotyfService notfy, CategoryRepository categoryRepository, IFileProvider fileProvider)
+        public NewsItemController(NewsItemRepository newsItemRepository, IMapper mapper, INotyfService notfy, CategoryRepository categoryRepository, IFileProvider fileProvider, IHubContext<GeneralHub> generalHub)
         {
             _newsItemRepository = newsItemRepository;
             _mapper = mapper;
             _notfy = notfy;
             _categoryRepository = categoryRepository;
             _fileProvider = fileProvider;
+            _generalHub = generalHub;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +78,7 @@ namespace School_Project___News_Portal.Controllers
             newsItem.Updated = DateTime.Now;
 
             await _newsItemRepository.AddAsync(newsItem);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "added a new News Item.");
             _notfy.Success("News Item Successfuly Added");
             return RedirectToAction("Index");
         }
@@ -119,6 +124,7 @@ namespace School_Project___News_Portal.Controllers
             newsItem.PhotoUrl = photoUrl;
             newsItem.Updated = DateTime.Now;
             await _newsItemRepository.UpdateAsync(newsItem);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "updated a News Item.");
             _notfy.Success("News Succesfuly Updated");
             return RedirectToAction("Index");
         }
@@ -135,6 +141,7 @@ namespace School_Project___News_Portal.Controllers
         public async Task<IActionResult> Delete(NewsItemModel model)
         {
             await _newsItemRepository.DeleteAsync(model.Id);
+            await _generalHub.Clients.All.SendAsync("itemChanged", User.Identity.Name + "deleted a News Item.");
             _notfy.Success("News Item Successfuly Deleted");
             return RedirectToAction("Index");
         }
